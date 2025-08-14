@@ -1,0 +1,58 @@
+name: Portfolio Sync & Deploy (Netlify)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *"   # daily at 06:00 UTC
+  repository_dispatch:
+    types: [project_updated]
+
+jobs:
+  sync-and-build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Run sync (generate new project files only)
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          PORTFOLIO_GH_USER: ${{ vars.PORTFOLIO_GH_USER }}
+          INCLUDE_TOPICS: "true"
+          MAX_REPOS: "100"
+        run: node scripts/sync.js
+
+      - name: Commit new project entries (if any)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/projects/*.json || true
+          git diff --cached --quiet || git commit -m "chore(data): add new project entries"
+          git push
+
+      - name: Build
+        run: pnpm build
+
+      - name: Deploy to Netlify
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --dir=.next --prod
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}

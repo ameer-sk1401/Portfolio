@@ -1,0 +1,23 @@
+# Add this to each project repo you want to trigger portfolio updates from
+name: Notify Portfolio
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call repository_dispatch on portfolio repo
+        env:
+          GH_TOKEN: ${{ secrets.PORTFOLIO_NOTIFY_TOKEN }}
+          OWNER: ${{ vars.PORTFOLIO_OWNER }}
+          REPO: ${{ vars.PORTFOLIO_REPO }} # e.g., your-username/your-portfolio
+        run: |
+          curl -L -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            https://api.github.com/repos/${OWNER}/${REPO}/dispatches \
+            -d '{"event_type":"project_updated"}'
