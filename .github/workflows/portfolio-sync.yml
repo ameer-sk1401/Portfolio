@@ -26,9 +26,13 @@ jobs:
         with:
           version: 9
           run_install: false
+          
+      - name: Approve pnpm build scripts
+        run: pnpm approve-builds @tailwindcss/oxide sharp
 
       - name: Install deps (allow lockfile update)
         run: pnpm install --no-frozen-lockfile
+        
       - name: Commit updated lockfile (if changed)
         run: |
           git config user.name "github-actions[bot]"
