@@ -48,7 +48,7 @@ jobs:
           PORTFOLIO_GH_USER: ${{ vars.PORTFOLIO_GH_USER }}
           INCLUDE_TOPICS: "true"
           MAX_REPOS: "100"
-        run: node scripts/sync.js
+        run: node scripts/sync.mjs
 
       - name: Commit new project entries (if any)
         run: |
