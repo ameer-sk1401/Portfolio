@@ -1,9 +1,38 @@
 # 👋 Hi, I'm Ameer Shaik
 
-**Cloud Engineer | DevOps & Data Engineering Enthusiast | AWS Certified (in progress)**
+**AWS Cloud Engineer | DevOps & Data Engineering Enthusiast | M.S. in Computer Science @ SUNY Binghamton**
 
-Welcome to my **Live Portfolio** — a self-hosted, auto-updating showcase of my work, skills, and certifications.  
-Every time I push a new project or earn a new skill, this site updates itself automatically through **GitHub Actions CI/CD** and deploys to **Netlify**.
+I design, build, and automate cloud-native solutions that make infrastructure **scalable, cost-efficient, and reliable**.  
+My expertise spans **AWS, DevOps automation, and data engineering pipelines** — combining engineering precision with a drive to solve real-world problems.
+
+💡 This portfolio is a **self-hosted, live-updating profile** powered by GitHub Actions CI/CD and Netlify.  
+Whenever I push a new project or earn a new skill, it **automatically updates** — no manual edits needed.
+
+---
+
+## 🎯 Career Focus
+
+- **Primary Goal** → Cloud Engineering & DevOps roles, leveraging AWS to design resilient, automated systems.
+- **Secondary Goal** → AI/Data Engineering roles combining cloud infrastructure with data pipelines and analytics.
+- **Long-Term Vision** → Build large-scale, cost-optimized, intelligent cloud systems that power global applications.
+
+---
+
+## 🛠 Skills & Technologies
+
+**Cloud Platforms & Services**  
+- AWS (EC2, S3, RDS, Lambda, IAM, VPC, CloudFormation, Athena, Redshift, Glue, QuickSight)
+- ServiceNow CRM Development
+
+**DevOps & Automation**  
+- Terraform | Ansible | Jenkins | GitHub Actions | Docker | CI/CD Pipelines
+
+**Programming & Data**  
+- Python Automation | SQL | Node.js
+- Data Engineering: ETL pipelines, real-time streaming, analytics dashboards
+
+**Other Tools & Practices**  
+- Networking Fundamentals | Linux | Git | REST APIs | Agile/Scrum
 
 ---
 
