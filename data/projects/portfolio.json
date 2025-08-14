@@ -1,0 +1,19 @@
+{
+  "repo": "Portfolio",
+  "owner": "ameer-sk1401",
+  "html_url": "https://github.com/ameer-sk1401/Portfolio",
+  "description": "Self Hosting Live Portfolio",
+  "language": "TypeScript",
+  "stars": 0,
+  "forks": 0,
+  "updated_at": "2025-08-14T19:16:52Z",
+  "summary_title": "👋 Hi, I'm Ameer Shaik",
+  "summary_blurb": "**AWS Cloud Engineer | DevOps & Data Engineering Enthusiast | M.S. in Computer Science @ SUNY Binghamton**",
+  "summary_bullets": [
+    "**Primary Goal** → Cloud Engineering & DevOps roles, leveraging AWS to design resilient, automated systems.",
+    "**Secondary Goal** → AI/Data Engineering roles combining cloud infrastructure with data pipelines and analytics.",
+    "**Long-Term Vision** → Build large-scale, cost-optimized, intelligent cloud systems that power global applications."
+  ],
+  "topics": [],
+  "created_at": "2025-08-14T19:17:38.284Z"
+}

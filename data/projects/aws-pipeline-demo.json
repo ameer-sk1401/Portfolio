@@ -1,0 +1,19 @@
+{
+  "repo": "AWS_pipeline_demo",
+  "owner": "ameer-sk1401",
+  "html_url": "https://github.com/ameer-sk1401/AWS_pipeline_demo",
+  "description": "aws hands-on for cicd",
+  "language": "Shell",
+  "stars": 0,
+  "forks": 0,
+  "updated_at": "2025-08-11T17:56:16Z",
+  "summary_title": "🚀 CI/CD for Flask App on AWS (GitHub → CodePipeline → CodeBuild → CodeDeploy → EC2)",
+  "summary_blurb": "This guide will teach you from **scratch** how to:",
+  "summary_bullets": [
+    "An **AWS account**",
+    "A **GitHub account**",
+    "Basic familiarity with:"
+  ],
+  "topics": [],
+  "created_at": "2025-08-14T19:17:38.969Z"
+}
