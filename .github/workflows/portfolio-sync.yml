@@ -58,14 +58,14 @@ jobs:
           git diff --cached --quiet || git commit -m "chore(data): add new project entries"
           git push
 
-      - name: Netlify build (runs Next.js adapter)
+      - name: Netlify build (optional)
         run: npx netlify build
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
-      - name: Deploy to Netlify (publish the adapter output)
-        run: npx netlify deploy --dir=.netlify/build/publish --functions=.netlify/build/functions --prod
+      - name: Deploy to Netlify (publish = .next from config)
+        run: npx netlify deploy --dir=.next --prod
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
