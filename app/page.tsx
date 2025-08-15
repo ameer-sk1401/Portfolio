@@ -1,27 +1,27 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Github, Linkedin, Mail, ExternalLink } from "lucide-react"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Github, Linkedin, Mail, ExternalLink } from "lucide-react";
 
 const AnimatedParticles = () => {
   const [particles, setParticles] = useState<
     Array<{
-      id: number
-      x: number
-      y: number
-      size: number
-      opacity: number
-      vx: number
-      vy: number
-      life: number
+      id: number;
+      x: number;
+      y: number;
+      size: number;
+      opacity: number;
+      vx: number;
+      vy: number;
+      life: number;
     }>
-  >([])
+  >([]);
 
   useEffect(() => {
     const generateParticles = () => {
-      const newParticles = []
+      const newParticles = [];
       for (let i = 0; i < 250; i++) {
         newParticles.push({
           id: i,
@@ -32,11 +32,11 @@ const AnimatedParticles = () => {
           vx: (Math.random() - 0.5) * 0.5,
           vy: (Math.random() - 0.5) * 0.5,
           life: Math.random() * 100,
-        })
+        });
       }
-      setParticles(newParticles)
-    }
-    generateParticles()
+      setParticles(newParticles);
+    };
+    generateParticles();
 
     const animateParticles = () => {
       setParticles((prevParticles) =>
@@ -46,13 +46,13 @@ const AnimatedParticles = () => {
           y: (particle.y + particle.vy + 100) % 100,
           life: particle.life + 1,
           opacity: 0.2 + Math.sin(particle.life * 0.02) * 0.3,
-        })),
-      )
-    }
+        }))
+      );
+    };
 
-    const interval = setInterval(animateParticles, 50)
-    return () => clearInterval(interval)
-  }, [])
+    const interval = setInterval(animateParticles, 50);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -97,20 +97,27 @@ const AnimatedParticles = () => {
         style={{ animationDelay: "3s", animationDuration: "4s" }}
       />
     </div>
-  )
-}
+  );
+};
+
+// Contact links (edit these)
+const LINKS = {
+  linkedin: "https://www.linkedin.com/in/your-linkedin-handle",
+  github: "https://github.com/ameer-sk1401",
+  email: "mailto:youremail@example.com",
+};
 
 // Navigation component
 const Navigation = () => {
-  const [activeSection, setActiveSection] = useState("home")
+  const [activeSection, setActiveSection] = useState("home");
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
+    const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-      setActiveSection(sectionId)
+      element.scrollIntoView({ behavior: "smooth" });
+      setActiveSection(sectionId);
     }
-  }
+  };
 
   return (
     <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
@@ -131,28 +138,38 @@ const Navigation = () => {
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
 
 // Hero section component
 const HeroSection = () => {
   return (
-    <section id="home" className="min-h-screen flex items-center justify-between px-8 lg:px-16 relative">
+    <section
+      id="home"
+      className="min-h-screen flex items-center justify-between px-8 lg:px-16 relative"
+    >
       <div className="flex-1 max-w-2xl">
-        <h1 className="text-6xl lg:text-7xl font-bold text-white mb-4">Hi, there!</h1>
+        <h1 className="text-6xl lg:text-7xl font-bold text-white mb-4">
+          Hi, there!
+        </h1>
         <h2 className="text-5xl lg:text-6xl font-bold text-white mb-6">
           I am <span className="text-blue-300">Ameer Shaik</span>
         </h2>
         <p className="text-xl text-white/80 mb-8 leading-relaxed">
-          Cloud Solutions Engineer from Binghamton, NY: Bridging the Gap Between Development and Operations While
-          Crafting the Future of Scalable Cloud Infrastructure and Automated Deployments.
+          Cloud Solutions Engineer from Binghamton, NY: Bridging the Gap Between
+          Development and Operations While Crafting the Future of Scalable Cloud
+          Infrastructure and Automated Deployments.
         </p>
         <div className="flex items-center space-x-4">
           <Button className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-6 py-3">
-            <Linkedin className="w-5 h-5" />
+            <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer">
+              <Linkedin className="w-5 h-5" />
+            </a>
           </Button>
           <Button className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-6 py-3">
-            <Github className="w-5 h-5" />
+            <a href={LINKS.github} target="_blank" rel="noopener noreferrer">
+              <Github className="w-5 h-5" />
+            </a>
           </Button>
         </div>
       </div>
@@ -161,14 +178,18 @@ const HeroSection = () => {
         <div className="relative">
           <div className="w-80 h-80 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
             <div className="w-64 h-64 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center overflow-hidden">
-              <img src="/images/profile.jpg" alt="Profile" className="w-full h-full object-cover rounded-full" />
+              <img
+                src="/images/profile.jpg"
+                alt="Profile"
+                className="w-full h-full object-cover rounded-full"
+              />
             </div>
           </div>
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
 // Skills section component
 const SkillsSection = () => {
@@ -176,11 +197,26 @@ const SkillsSection = () => {
     {
       title: "Programming Languages",
       skills: [
-        { name: "Python", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
-        { name: "SQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
-        { name: "NoSQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
-        { name: "Go", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg" },
-        { name: "Bash", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg" },
+        {
+          name: "Python",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+        },
+        {
+          name: "SQL",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg",
+        },
+        {
+          name: "NoSQL",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
+        },
+        {
+          name: "Go",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg",
+        },
+        {
+          name: "Bash",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg",
+        },
       ],
     },
     {
@@ -189,9 +225,20 @@ const SkillsSection = () => {
         {
           name: "EC2",
           icon: (
-            <svg className="w-full h-full" height="40" width="40" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              className="w-full h-full"
+              height="40"
+              width="40"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <defs>
-                <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="ec2-gradient">
+                <linearGradient
+                  x1="0%"
+                  y1="100%"
+                  x2="100%"
+                  y2="0%"
+                  id="ec2-gradient"
+                >
                   <stop stopColor="#C8511B" offset="0%"></stop>
                   <stop stopColor="#F90" offset="100%"></stop>
                 </linearGradient>
@@ -209,9 +256,20 @@ const SkillsSection = () => {
         {
           name: "S3",
           icon: (
-            <svg className="w-full h-full" height="40" width="40" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              className="w-full h-full"
+              height="40"
+              width="40"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <defs>
-                <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="s3-gradient">
+                <linearGradient
+                  x1="0%"
+                  y1="100%"
+                  x2="100%"
+                  y2="0%"
+                  id="s3-gradient"
+                >
                   <stop stopColor="#1B660F" offset="0%"></stop>
                   <stop stopColor="#6CAE3E" offset="100%"></stop>
                 </linearGradient>
@@ -229,9 +287,20 @@ const SkillsSection = () => {
         {
           name: "VPC",
           icon: (
-            <svg className="w-full h-full" height="40" width="40" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              className="w-full h-full"
+              height="40"
+              width="40"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <defs>
-                <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="vpc-gradient">
+                <linearGradient
+                  x1="0%"
+                  y1="100%"
+                  x2="100%"
+                  y2="0%"
+                  id="vpc-gradient"
+                >
                   <stop stopColor="#4D27A8" offset="0%"></stop>
                   <stop stopColor="#A166FF" offset="100%"></stop>
                 </linearGradient>
@@ -249,9 +318,20 @@ const SkillsSection = () => {
         {
           name: "RDS",
           icon: (
-            <svg className="w-full h-full" height="40" width="40" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              className="w-full h-full"
+              height="40"
+              width="40"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <defs>
-                <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="rds-gradient">
+                <linearGradient
+                  x1="0%"
+                  y1="100%"
+                  x2="100%"
+                  y2="0%"
+                  id="rds-gradient"
+                >
                   <stop stopColor="#2E27AD" offset="0%"></stop>
                   <stop stopColor="#527FFF" offset="100%"></stop>
                 </linearGradient>
@@ -269,9 +349,20 @@ const SkillsSection = () => {
         {
           name: "Lambda",
           icon: (
-            <svg className="w-full h-full" height="40" width="40" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              className="w-full h-full"
+              height="40"
+              width="40"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <defs>
-                <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="lambda-gradient">
+                <linearGradient
+                  x1="0%"
+                  y1="100%"
+                  x2="100%"
+                  y2="0%"
+                  id="lambda-gradient"
+                >
                   <stop stopColor="#C8511B" offset="0%"></stop>
                   <stop stopColor="#F90" offset="100%"></stop>
                 </linearGradient>
@@ -290,9 +381,20 @@ const SkillsSection = () => {
         {
           name: "QuickSight",
           icon: (
-            <svg className="w-full h-full" height="40" width="40" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              className="w-full h-full"
+              height="40"
+              width="40"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <defs>
-                <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="quicksight-gradient">
+                <linearGradient
+                  x1="0%"
+                  y1="100%"
+                  x2="100%"
+                  y2="0%"
+                  id="quicksight-gradient"
+                >
                   <stop stopColor="#4D27A8" offset="0%"></stop>
                   <stop stopColor="#A166FF" offset="100%"></stop>
                 </linearGradient>
@@ -310,7 +412,12 @@ const SkillsSection = () => {
         {
           name: "IAM",
           icon: (
-            <svg className="w-full h-full" height="48" width="48" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              className="w-full h-full"
+              height="48"
+              width="48"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <path
                 d="M15 25.001h4v-2h-4v2zm-11 2h7v-7H4v7zm8 2H3a1 1 0 01-1-1v-9a1 1 0 011-1h9a1 1 0 011 1v9a1 1 0 01-1 1zm31.2-2l-3.2-5.11-3.2 5.11h6.4zm2.67 1.48a1.002 1.002 0 01-.87.52H35a1 1 0 01-.851-1.53l5-8a1 1 0 011.702 0l5 8c.187.308.195.694.019 1.01zM43 41.001a3 3 0 10-6 0 3 3 0 006 0zm2 0a5 5 0 01-9.899 1H7a1 1 0 01-1-1v-10h2v9h27.101a4.998 4.998 0 015.894-3.905A4.999 4.999 0 0145 41.001zm-23-16h4v-2h-4v2zm15-18a3 3 0 106 0 3 3 0 00-6 0zm-29 9H6v-9a1 1 0 011-1h28.101a4.999 4.999 0 119.796 2 5 5 0 01-9.796 0H8v8zm21 9h4v-2h-4v2z"
                 fill="#BF0816"
@@ -322,9 +429,20 @@ const SkillsSection = () => {
         {
           name: "DynamoDB",
           icon: (
-            <svg className="w-full h-full" height="40" width="40" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              className="w-full h-full"
+              height="40"
+              width="40"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <defs>
-                <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="dynamodb-gradient">
+                <linearGradient
+                  x1="0%"
+                  y1="100%"
+                  x2="100%"
+                  y2="0%"
+                  id="dynamodb-gradient"
+                >
                   <stop stopColor="#2E27AD" offset="0%"></stop>
                   <stop stopColor="#527FFF" offset="100%"></stop>
                 </linearGradient>
@@ -342,9 +460,20 @@ const SkillsSection = () => {
         {
           name: "CloudWatch",
           icon: (
-            <svg className="w-full h-full" height="40" width="40" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              className="w-full h-full"
+              height="40"
+              width="40"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <defs>
-                <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="cloudwatch-gradient">
+                <linearGradient
+                  x1="0%"
+                  y1="100%"
+                  x2="100%"
+                  y2="0%"
+                  id="cloudwatch-gradient"
+                >
                   <stop stopColor="#B0084D" offset="0%"></stop>
                   <stop stopColor="#FF4F8B" offset="100%"></stop>
                 </linearGradient>
@@ -362,9 +491,20 @@ const SkillsSection = () => {
         {
           name: "CodeDeploy",
           icon: (
-            <svg className="w-full h-full" height="40" width="40" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              className="w-full h-full"
+              height="40"
+              width="40"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <defs>
-                <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="codedeploy-gradient">
+                <linearGradient
+                  x1="0%"
+                  y1="100%"
+                  x2="100%"
+                  y2="0%"
+                  id="codedeploy-gradient"
+                >
                   <stop stopColor="#2E27AD" offset="0%"></stop>
                   <stop stopColor="#527FFF" offset="100%"></stop>
                 </linearGradient>
@@ -382,9 +522,20 @@ const SkillsSection = () => {
         {
           name: "ECS",
           icon: (
-            <svg className="w-full h-full" height="40" width="40" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              className="w-full h-full"
+              height="40"
+              width="40"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <defs>
-                <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="ecs-gradient">
+                <linearGradient
+                  x1="0%"
+                  y1="100%"
+                  x2="100%"
+                  y2="0%"
+                  id="ecs-gradient"
+                >
                   <stop stopColor="#C8511B" offset="0%"></stop>
                   <stop stopColor="#F90" offset="100%"></stop>
                 </linearGradient>
@@ -402,9 +553,20 @@ const SkillsSection = () => {
         {
           name: "SNS",
           icon: (
-            <svg className="w-full h-full" height="40" width="40" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              className="w-full h-full"
+              height="40"
+              width="40"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <defs>
-                <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="sns-gradient">
+                <linearGradient
+                  x1="0%"
+                  y1="100%"
+                  x2="100%"
+                  y2="0%"
+                  id="sns-gradient"
+                >
                   <stop stopColor="#B0084D" offset="0%"></stop>
                   <stop stopColor="#FF4F8B" offset="100%"></stop>
                 </linearGradient>
@@ -422,9 +584,20 @@ const SkillsSection = () => {
         {
           name: "SQS",
           icon: (
-            <svg className="w-full h-full" height="40" width="40" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              className="w-full h-full"
+              height="40"
+              width="40"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <defs>
-                <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="sqs-gradient">
+                <linearGradient
+                  x1="0%"
+                  y1="100%"
+                  x2="100%"
+                  y2="0%"
+                  id="sqs-gradient"
+                >
                   <stop stopColor="#B0084D" offset="0%"></stop>
                   <stop stopColor="#FF4F8B" offset="100%"></stop>
                 </linearGradient>
@@ -439,13 +612,19 @@ const SkillsSection = () => {
             </svg>
           ),
         },
-        { name: "AWS Glue", icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ayzVM.png" },
+        {
+          name: "AWS Glue",
+          icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ayzVM.png",
+        },
       ],
     },
     {
       title: "Data Analytics",
       skills: [
-        { name: "Power BI", icon: "https://upload.wikimedia.org/wikipedia/commons/c/cf/New_Power_BI_Logo.svg" },
+        {
+          name: "Power BI",
+          icon: "https://upload.wikimedia.org/wikipedia/commons/c/cf/New_Power_BI_Logo.svg",
+        },
         {
           name: "Airflow",
           icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-T4KYAGteYxD6iutQkzk2W3S1mtdNSU.png",
@@ -458,9 +637,18 @@ const SkillsSection = () => {
           name: "PySpark",
           icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-CgXKlKGvcZ5L1UfQt5JV1Yn8nAPuio.png",
         },
-        { name: "REST APIs", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" },
-        { name: "Pandas", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg" },
-        { name: "NumPy", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg" },
+        {
+          name: "REST APIs",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg",
+        },
+        {
+          name: "Pandas",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg",
+        },
+        {
+          name: "NumPy",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg",
+        },
         {
           name: "Matplotlib",
           icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/matplotlib/matplotlib-original.svg",
@@ -478,30 +666,54 @@ const SkillsSection = () => {
           name: "CloudFormation",
           icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-NHc7U8TD28K48csu7eoNpxgBJOFsNh.png",
         },
-        { name: "Ansible", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ansible/ansible-original.svg" },
+        {
+          name: "Ansible",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ansible/ansible-original.svg",
+        },
       ],
     },
     {
       title: "Other Tools & Software",
       skills: [
-        { name: "Linux", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" },
-        { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
-        { name: "GitHub", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" },
+        {
+          name: "Linux",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg",
+        },
+        {
+          name: "Git",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg",
+        },
+        {
+          name: "GitHub",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+        },
         {
           name: "GitHub Actions",
           icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
         },
-        { name: "Docker", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" },
+        {
+          name: "Docker",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
+        },
         {
           name: "ServiceNow",
           icon: "/images/servicenow-logo.png",
         },
-        { name: "Jira", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jira/jira-original.svg" },
-        { name: "Postman", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg" },
-        { name: "Boto3", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
+        {
+          name: "Jira",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jira/jira-original.svg",
+        },
+        {
+          name: "Postman",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg",
+        },
+        {
+          name: "Boto3",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+        },
       ],
     },
-  ]
+  ];
 
   return (
     <section id="skills" className="min-h-screen py-20 px-8 lg:px-16">
@@ -516,7 +728,10 @@ const SkillsSection = () => {
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 ml-7">
               {category.skills.map((skill, skillIndex) => (
-                <div key={skillIndex} className="flex flex-col items-center space-y-2 group cursor-pointer">
+                <div
+                  key={skillIndex}
+                  className="flex flex-col items-center space-y-2 group cursor-pointer"
+                >
                   <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center group-hover:bg-white/20 group-hover:scale-110 transition-all duration-300 p-3">
                     {typeof skill.icon === "string" ? (
                       <img
@@ -524,11 +739,16 @@ const SkillsSection = () => {
                         alt={skill.name}
                         className="w-full h-full object-contain transition-all duration-300"
                         onError={(e) => {
-                          e.currentTarget.src = "/placeholder.svg?height=40&width=40&query=" + skill.name + " icon"
+                          e.currentTarget.src =
+                            "/placeholder.svg?height=40&width=40&query=" +
+                            skill.name +
+                            " icon";
                         }}
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center">{skill.icon}</div>
+                      <div className="w-full h-full flex items-center justify-center">
+                        {skill.icon}
+                      </div>
                     )}
                   </div>
                   <span className="text-white/80 text-sm text-center group-hover:text-white transition-colors duration-200">
@@ -541,8 +761,8 @@ const SkillsSection = () => {
         ))}
       </div>
     </section>
-  )
-}
+  );
+};
 
 // Education section component
 const EducationSection = () => {
@@ -555,10 +775,13 @@ const EducationSection = () => {
       gpa: "GPA: 3.4",
       icon: "🎓",
     },
-  ]
+  ];
 
   return (
-    <section id="education" className="min-h-screen py-20 px-8 lg:px-16 relative">
+    <section
+      id="education"
+      className="min-h-screen py-20 px-8 lg:px-16 relative"
+    >
       <h2 className="text-5xl font-bold text-white mb-16">Education</h2>
 
       <div className="flex items-center justify-between">
@@ -574,13 +797,18 @@ const EducationSection = () => {
 
         <div className="flex-1 space-y-6">
           {education.map((edu, index) => (
-            <Card key={index} className="bg-black/40 border-white/10 p-6 backdrop-blur-sm">
+            <Card
+              key={index}
+              className="bg-black/40 border-white/10 p-6 backdrop-blur-sm"
+            >
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-xl">
                   {edu.icon}
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold text-blue-300 mb-1">{edu.institution}</h3>
+                  <h3 className="text-xl font-bold text-blue-300 mb-1">
+                    {edu.institution}
+                  </h3>
                   <p className="text-white font-semibold mb-1">{edu.degree}</p>
                   <p className="text-white/80 text-sm mb-1">{edu.field}</p>
                   <p className="text-white/60 text-sm mb-1">{edu.period}</p>
@@ -591,16 +819,19 @@ const EducationSection = () => {
           ))}
 
           <Card className="bg-black/30 border-white/5 p-4 backdrop-blur-sm">
-            <h4 className="text-lg font-semibold text-white mb-2">Relevant Coursework</h4>
+            <h4 className="text-lg font-semibold text-white mb-2">
+              Relevant Coursework
+            </h4>
             <p className="text-white/70 text-sm">
-              Data Structures and Algorithms, Operating Systems, Artificial Intelligence, Machine Learning, Data Mining
+              Data Structures and Algorithms, Operating Systems, Artificial
+              Intelligence, Machine Learning, Data Mining
             </p>
           </Card>
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
 // Projects section component
 const ProjectsSection = () => {
@@ -641,7 +872,7 @@ const ProjectsSection = () => {
       github: "#",
       demo: "#",
     },
-  ]
+  ];
 
   return (
     <section id="projects" className="min-h-screen py-20 px-8 lg:px-16">
@@ -658,11 +889,16 @@ const ProjectsSection = () => {
                 {project.icon}
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-bold text-blue-300 mb-2">{project.title}</h3>
+                <h3 className="text-xl font-bold text-blue-300 mb-2">
+                  {project.title}
+                </h3>
                 <p className="text-white/60 text-sm mb-3">Tech Stack</p>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {project.techStack.map((tech, techIndex) => (
-                    <span key={techIndex} className="px-2 py-1 bg-white/10 rounded text-xs text-white">
+                    <span
+                      key={techIndex}
+                      className="px-2 py-1 bg-white/10 rounded text-xs text-white"
+                    >
                       {tech}
                     </span>
                   ))}
@@ -670,14 +906,24 @@ const ProjectsSection = () => {
               </div>
             </div>
 
-            <p className="text-white/80 text-sm mb-6 leading-relaxed">{project.description}</p>
+            <p className="text-white/80 text-sm mb-6 leading-relaxed">
+              {project.description}
+            </p>
 
             <div className="flex space-x-4">
-              <Button variant="ghost" size="sm" className="text-white hover:text-blue-300">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white hover:text-blue-300"
+              >
                 <Github className="w-4 h-4 mr-2" />
                 Code
               </Button>
-              <Button variant="ghost" size="sm" className="text-white hover:text-blue-300">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white hover:text-blue-300"
+              >
                 <ExternalLink className="w-4 h-4 mr-2" />
                 Demo
               </Button>
@@ -686,42 +932,70 @@ const ProjectsSection = () => {
         ))}
       </div>
     </section>
-  )
-}
+  );
+};
 
 // Contact section component
 const ContactSection = () => {
   return (
-    <section id="contact" className="min-h-screen py-20 px-8 lg:px-16 flex items-center">
+    <section
+      id="contact"
+      className="min-h-screen py-20 px-8 lg:px-16 flex items-center"
+    >
       <div className="w-full max-w-4xl mx-auto text-center">
         <h2 className="text-5xl font-bold text-white mb-8">Ameer Shaik</h2>
         <p className="text-xl text-white/80 mb-12 max-w-2xl mx-auto">
-          Automation is the art of translating complex systems into simple, repeatable processes.
+          Automation is the art of translating complex systems into simple,
+          repeatable processes.
         </p>
 
         <div className="flex justify-center space-x-6 mb-12">
-          <Button variant="ghost" size="lg" className="text-white hover:text-blue-300">
-            <Linkedin className="w-6 h-6" />
+          <Button
+            variant="ghost"
+            size="lg"
+            className="text-white hover:text-blue-300"
+          >
+            <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer">
+              <Linkedin className="w-6 h-6" />
+            </a>
           </Button>
-          <Button variant="ghost" size="lg" className="text-white hover:text-blue-300">
-            <Github className="w-6 h-6" />
+          <Button
+            variant="ghost"
+            size="lg"
+            className="text-white hover:text-blue-300"
+          >
+            <a href={LINKS.github} target="_blank" rel="noopener noreferrer">
+              <Github className="w-6 h-6" />
+            </a>
           </Button>
-          <Button variant="ghost" size="lg" className="text-white hover:text-blue-300">
-            <Mail className="w-6 h-6" />
+          <Button
+            variant="ghost"
+            size="lg"
+            className="text-white hover:text-blue-300"
+          >
+            <a href={LINKS.email} target="_blank" rel="noopener noreferrer">
+              <Mail className="w-6 h-6" />
+            </a>
           </Button>
         </div>
 
-        <Button className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full text-lg">Resume</Button>
+        <Button className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full text-lg">
+          Resume
+        </Button>
 
         <div className="mt-16">
           <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mb-4 overflow-hidden">
-            <img src="/images/profile.jpg" alt="Profile" className="w-full h-full object-cover rounded-full" />
+            <img
+              src="/images/profile.jpg"
+              alt="Profile"
+              className="w-full h-full object-cover rounded-full"
+            />
           </div>
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
 export default function Portfolio() {
   return (
@@ -739,18 +1013,34 @@ export default function Portfolio() {
 
       <style jsx>{`
         @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          33% { transform: translateY(-15px) rotate(120deg); }
-          66% { transform: translateY(-5px) rotate(240deg); }
+          0%,
+          100% {
+            transform: translateY(0px) rotate(0deg);
+          }
+          33% {
+            transform: translateY(-15px) rotate(120deg);
+          }
+          66% {
+            transform: translateY(-5px) rotate(240deg);
+          }
         }
-        
+
         @keyframes drift {
-          0%, 100% { transform: translateX(0px) translateY(0px); }
-          25% { transform: translateX(10px) translateY(-10px); }
-          50% { transform: translateX(-5px) translateY(-20px); }
-          75% { transform: translateX(-10px) translateY(-5px); }
+          0%,
+          100% {
+            transform: translateX(0px) translateY(0px);
+          }
+          25% {
+            transform: translateX(10px) translateY(-10px);
+          }
+          50% {
+            transform: translateX(-5px) translateY(-20px);
+          }
+          75% {
+            transform: translateX(-10px) translateY(-5px);
+          }
         }
       `}</style>
     </div>
-  )
+  );
 }
