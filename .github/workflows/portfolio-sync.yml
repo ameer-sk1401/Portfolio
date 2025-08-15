@@ -1,9 +1,28 @@
 name: Portfolio Sync & Deploy (Netlify)
 
 on:
+  # 1) run when you push changes to the portfolio repo (main branch)
+  push:
+    branches: [ main ]
+    # only run when site-relevant files change (edit as you like)
+    paths:
+      - "app/**"
+      - "components/**"
+      - "data/**"
+      - "public/**"
+      - "scripts/**"
+      - "styles/**"
+      - "next.config.*"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "netlify.toml"
+      - ".github/workflows/portfolio-sync.yml"
+  # 2) manual button in Actions tab
   workflow_dispatch:
+  # 3) daily
   schedule:
-    - cron: "0 6 * * *"   # daily at 06:00 UTC
+    - cron: "0 6 * * *"
+  # 4) when project repos ping via repository_dispatch
   repository_dispatch:
     types: [project_updated]
 
@@ -27,20 +46,8 @@ jobs:
           version: 9
           run_install: false
 
-      # If your lockfile is current, use --frozen-lockfile
       - name: Install deps
         run: pnpm install --frozen-lockfile
-
-      # If you still see lockfile mismatch errors, replace the step above with:
-      # - name: Install deps (allow lockfile update)
-      #   run: pnpm install --no-frozen-lockfile
-      # - name: Commit updated lockfile (if changed)
-      #   run: |
-      #     git config user.name "github-actions[bot]"
-      #     git config user.email "github-actions[bot]@users.noreply.github.com"
-      #     git add pnpm-lock.yaml
-      #     git diff --cached --quiet || git commit -m "chore: lockfile: update"
-      #     git push || true
 
       - name: Run sync (generate new project files only)
         env:
@@ -58,14 +65,9 @@ jobs:
           git diff --cached --quiet || git commit -m "chore(data): add new project entries"
           git push
 
-      - name: Netlify build (optional)
-        run: npx netlify build
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-
-      - name: Deploy to Netlify (publish = .next from config)
-        run: npx netlify deploy --dir=.next --prod
+      # Build & deploy using netlify.toml's resolved publish dir (.next for your static build)
+      - name: Build & Deploy to Netlify
+        run: npx netlify deploy --build --prod
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
