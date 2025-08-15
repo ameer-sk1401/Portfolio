@@ -1,9 +1,40 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Github, Linkedin, Mail, ExternalLink } from "lucide-react";
+
+const useScrollAnimation = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
+
+  return [ref, isVisible] as const;
+};
 
 const AnimatedParticles = () => {
   const [particles, setParticles] = useState<
@@ -125,15 +156,17 @@ const Navigation = () => {
         <div className="flex items-center space-x-8">
           <div className="text-2xl font-bold text-white">AS</div>
           <div className="flex space-x-6">
-            {["Skills", "Education", "Projects", "Contact"].map((item) => (
-              <button
-                key={item}
-                onClick={() => scrollToSection(item.toLowerCase())}
-                className="text-white/80 hover:text-white transition-colors duration-200 text-sm font-medium"
-              >
-                {item}
-              </button>
-            ))}
+            {["Skills", "Experience", "Education", "Projects", "Contact"].map(
+              (item) => (
+                <button
+                  key={item}
+                  onClick={() => scrollToSection(item.toLowerCase())}
+                  className="text-white/80 hover:text-white transition-colors duration-200 text-sm font-medium"
+                >
+                  {item}
+                </button>
+              )
+            )}
           </div>
         </div>
       </div>
@@ -143,10 +176,15 @@ const Navigation = () => {
 
 // Hero section component
 const HeroSection = () => {
+  const [heroRef, heroVisible] = useScrollAnimation();
+
   return (
     <section
+      ref={heroRef}
       id="home"
-      className="min-h-screen flex items-center justify-between px-8 lg:px-16 relative"
+      className={`min-h-screen flex items-center justify-between px-8 lg:px-16 relative transition-all duration-1000 ${
+        heroVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+      }`}
     >
       <div className="flex-1 max-w-2xl">
         <h1 className="text-6xl lg:text-7xl font-bold text-white mb-4">
@@ -207,8 +245,9 @@ const HeroSection = () => {
   );
 };
 
-// Skills section component
 const SkillsSection = () => {
+  const [skillsRef, skillsVisible] = useScrollAnimation();
+
   const skillCategories = [
     {
       title: "Programming Languages",
@@ -262,7 +301,7 @@ const SkillsSection = () => {
               <g fill="none" fillRule="evenodd">
                 <path d="M0 0h40v40H0z" fill="url(#ec2-gradient)"></path>
                 <path
-                  d="M26.052 27L26 13.948 13 14v13.052L26.052 27zM27 14h2v1h-2v2h2v1h-2v2h2v1h-2v2h2v1h-2v2h2v1h-2v2h2v1h-2v.052a.95.95 0 01-.948.948H26v2h-1v-2h-2v2h-1v-2h-2v2h-1v-2h-2v2h-1v-2h-2v2h-1v-2h-.052a.95.95 0 01-.948-.948V27h-2v-1h2v-2h-2v-1h2v-2h-2v-1h2v-2h-2v-1h2v-.052a.95.95 0 01.948-.948H13v-2h1v2h2v-2h1v2h2v-2h1v2h2v-2h1v2h2v-2h1v2h.052a.95.95 0 01.948.948V14zm-6 19H7V19h2v-1H7.062C6.477 18 6 18.477 6 19.062v13.876C6 33.523 6.477 34 7.062 34h13.877c.585 0 1.061-.477 1.061-1.062V31h-1v2zM34 7.062v13.876c0 .585-.476 1.062-1.061 1.062H30v-1h3V7H19v3h-1V7.062C18 6.477 18.477 6 19.062 6h13.877C33.524 6 34 6.477 34 7.062z"
+                  d="M26.052 27L26 13.948 13 14v13.052L26.052 27zM27 14h2v1h-2v2h2v1h-2v2h2v1h-2v2h2v1h-2v2h2v1h-2v.052a.95.95 0 01-.948.948H26v2h-1v-2h-2v2h-1v-2h-2v2h-1v-2h-2v2h-1v-2h-.052a.95.95 0 01-.948-.948V27h-2v-1h2v-2h-2v-1h2v-2h-2v-1h2v-2h-2v-1h2v-.052a.95.95 0 01.948-.948H13v-2h1v2h2v-2h1v2h2v-2h1v2h2v-2h1v2h2v-2h1v2h.052a.95.95 0 01.948.948V14zm-6 19H7V19h2v-1H7.062C6.477 18 6 18.477 6 19.062v13.876C6 33.523 6.477 34 7.062 34h13.877c.585 0 1.061-.477 1.061-1.062V31h-1v2zM34 7.062v13.876c0 .585-.476 1.062-1.061 1.062H30v-1h3V7H19v3h-1V7.062C18 6.477 18.477 6 19.062 6h13.877C33.524 6 34 6.477 34 7.062z"
                   fill="#FFF"
                 ></path>
               </g>
@@ -386,8 +425,7 @@ const SkillsSection = () => {
               <g fill="none" fillRule="evenodd">
                 <path d="M0 0h40v40H0z" fill="url(#lambda-gradient)"></path>
                 <path
-                  d="M14.386 33H8.27l6.763-14.426 3.064 6.44L14.387 33zm1.085-15.798a.49.49 0 00-.442-.282h-.002a.493.493 0 00-.441.285l-7.538 16.08a.507.507 0 00.028.482c.09.145.247.233.415.233h7.206c.19 0 .363-.111.445-.286l3.944-8.489a.508.508 0 00-.002-.432l-3.613-7.591zM32.018 33h-5.882l-9.47-20.711a.491.491 0 00-.444-.289H12.37l.005-5h7.549l9.424 20.71c.08.177.256.29.446.29h2.224v5zm.49-6h-2.4L20.684 6.29a.492.492 0 00-.446-.29h-8.353a.496.496 0 00-.491.5l-.006 6c0 .132.052.259.144.354a.488.488 0 00.347.146h4.032l9.468 20.711c.08.176.254.289.445.289h6.686a
-.495.495 0 00.491-.5v-6c0-.276-.219-.5-.491-.5z"
+                  d="M14.386 33H8.27l6.763-14.426 3.064 6.44L14.387 33zm1.085-15.798a.49.49 0 00-.442-.282h-.002a.493.493 0 00-.441.285l-7.538 16.08a.507.507 0 00.028.482c.09.145.247.233.415.233h7.206c.19 0 .363-.111.445-.286l3.944-8.489a.508.508 0 00-.002-.432l-3.613-7.591zM32.018 33h-5.882l-9.47-20.711a.491.491 0 00-.444-.289H12.37l.005-5h7.549l9.424 20.71c.08.177.256.29.446.29h2.224v5zm.49-6h-2.4L20.684 6.29a.492.492 0 00-.446-.29h-8.353a.496.496 0 00-.491.5l-.006 6c0 .132.052.259.144.354a.488.488 0 00.347.146h4.032l9.468 20.711c.08.176.254.289.445.289h6.686a.495.495 0 00.491-.5v-6c0-.276-.219-.5-.491-.5z"
                   fill="#FFF"
                 ></path>
               </g>
@@ -590,7 +628,7 @@ const SkillsSection = () => {
               <g fill="none" fillRule="evenodd">
                 <path d="M0 0h40v40H0z" fill="url(#sns-gradient)"></path>
                 <path
-                  d="M7.01 20.078a1.1 1.1 0 011.105-1.093 1.1 1.1 0 011.104 1.093 1.1 1.1 0 01-1.104 1.093 1.1 1.1 0 01-1.105-1.093zM20.776 33C14.813 33 9.645 28.375 8.47 22.136a2.1 2.1 0 001.69-1.558h2.949v-1h-2.95a2.104 2.104 0 00-1.653-1.554C9.72 12.252 14.838 8 20.776 8c2.933 0 5.354.643 7.194 1.911l.575-.821C26.534 7.703 23.92 7 20.776 7c-6.51 0-12.104 4.726-13.308 11.096C6.62 18.368 6 19.149 6 20.078c0 .916.602 1.688 1.431 1.971C8.591 28.894 14.24 34 20.776 34c3.285 0 6.788-1.667 8.786-3.094l-.59-.811C26.947 31.541 23.627 33 20.777 33zM14.79 18.242c1.111.274 2.523.321 3.343.321.833 0 2.271-.047 3.402-.32l-2.401 5.014a.507.507 0 00-.048.215v2.324l-1.957.915v-3.239a.514.514 0 00-.044-.206l-2.295-5.024zm3.343-1.757c2.314 0 3.554.311 3.951.52-.417.234-1.745.558-3.95.558-2.184 0-3.483-.327-3.873-.558.37-.206 1.582-.52 3.872-.52zm-1.78 11.438a.511.511 0 00.486.03l2.968-1.388a.5.5 0 00.288-.452v-2.529l2.909-6.074a.806.806 0 00.189-.51c0-1.252-2.751-1.515-5.06-1.515-2.266 0-4.969.263-4.969 1.515 0 .19.067.355.18.502l2.775 6.077V27.5c0 .172.088.331.235.423zM30.877 27a1.1 1.1 0 011.104 1.093 1.1 1.1 0 01-1.104 1.093 1.1 1.1 0 01-1.104-1.093A1.1 1.1 0 0130.876 27zm0-16.03a1.1 1.1 0 011.104 1.093 1.1 1.1 0 01-1.104 1.093 1.1 1.1 0 01-1.104-1.093 1.1 1.1 0 011.104-1.093zm1.01 8.015a1.1 1.1 0 011.104 1.093 1.1 1.1 0 01-1.104 1.093 1.1 1.1 0 01-1.104-1.093 1.1 1.1 0 011.104-1.093zm-4.607 1.593h2.561a2.108 2.108 0 002.046 1.593A2.106 2.106 0 0034 20.078a2.106 2.106 0 00-2.114-2.093c-.992 0-1.818.681-2.046 1.593H27.28v-7.015h1.551a2.108 2.108 0 002.046 1.593 2.106 2.106 0 002.114-2.093 2.106 2.106 0 00-2.114-2.093c-.991 0-1.818.681-2.046 1.593h-2.056a.502.502 0 00-.505.5v7.515h-3.061v1h3.061v7.515c0 .277.226.5.505.5h2.056a2.108 2.108 0 002.046 1.593 2.106 2.106 0 002.114-2.093A2.106 2.106 0 0030.876 26c-.991 0-1.818.681-2.046 1.593H27.28v-7.015z"
+                  d="M7.01 20.078a1.1 1.1 0 011.105-1.093 1.1 1.1 0 011.104 1.093 1.1 1.1 0 01-1.104 1.093 1.1 1.1 0 01-1.105-1.093zM20.776 33C14.813 33 9.645 28.375 8.47 22.136a2.1 2.1 0 001.69-1.558h2.949v-1h-2.95a2.104 2.104 0 00-1.653-1.554C9.72 12.252 14.838 8 20.776 8c2.933 0 5.354.643 7.194 1.911l.575-.821C26.534 7.703 23.92 7 20.776 7c-6.51 0-12.104 4.726-13.308 11.096C6.62 18.368 6 19.149 6 20.078c0 .916.602 1.688 1.431 1.971C8.591 28.894 14.24 34 20.776 34c3.285 0 6.788-1.667 8.786-3.094l-.59-.811C26.947 31.541 23.627 33 20.777 33zM14.79 18.242c1.111.274 2.523.321 3.343.321.833 0 2.271-.047 3.402-.32l-2.401 5.014a.507.507 0 00-.048.215v2.324l-1.957.915v-3.239a.514.514 0 00-.044-.206l-2.295-5.024zm3.343-1.757c2.314 0 3.554.311 3.951.52-.417.234-1.745.558-3.95.558-2.184 0-3.483-.327-3.873-.558.37-.206 1.582-.52 3.872-.52zm-1.78 11.438a.511.511 0 00.486.03l2.968-1.388a.5.5 0 00.288-.452v-2.529l2.909-6.074a.806.806 0 00.189-.51c0-1.252-2.751-1.515-5.06-1.515-2.266 0-4.969.263-4.969 1.515 0 .19.067.355.18.502l2.775 6.077V27.5c0 .172.088.331.235.423zM30.877 27a1.1 1.1 0 011.104 1.093 1.1 1.1 0 01-1.104 1.093 1.1 1.1 0 01-1.104-1.093A1.1 1.1 0 0130.876 27zm0-16.03a1.1 1.1 0 011.104 1.093 1.1 1.1 0 01-1.104 1.093 1.1 1.1 0 01-1.104-1.093 1.1 1.1 0 011.104-1.093zm1.01 8.015a.1.1 0 011.104 1.093 1.1 1.1 0 01-1.104 1.093 1.1 1.1 0 01-1.104-1.093 1.1 1.1 0 011.104-1.093zm-4.607 1.593h2.561a2.108 2.108 0 002.046 1.593A2.106 2.106 0 0034 20.078a2.106 2.106 0 00-2.114-2.093c-.992 0-1.818.681-2.046 1.593H27.28v-7.015z"
                   fill="#FFF"
                 ></path>
               </g>
@@ -732,13 +770,29 @@ const SkillsSection = () => {
   ];
 
   return (
-    <section id="skills" className="min-h-screen py-20 px-8 lg:px-16">
-      <h2 className="text-5xl font-bold text-white mb-16">Skills</h2>
+    <section
+      ref={skillsRef}
+      id="skills"
+      className={`min-h-screen py-20 px-8 lg:px-16 transition-all duration-1000 ${
+        skillsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+      }`}
+    >
+      <h2 className="text-5xl font-bold text-white mb-16 text-center hover:scale-110 hover:text-blue-300 transition-all duration-300 cursor-default">
+        Skills
+      </h2>
 
       <div className="space-y-12">
         {skillCategories.map((category, index) => (
-          <div key={index}>
-            <h3 className="text-2xl font-semibold text-white mb-6 flex items-center">
+          <div
+            key={index}
+            className={`transition-all duration-700 ${
+              skillsVisible
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 -translate-x-10"
+            }`}
+            style={{ transitionDelay: `${index * 200}ms` }}
+          >
+            <h3 className="text-2xl font-semibold text-blue-400 mb-6 flex items-center">
               <div className="w-3 h-3 bg-white rounded-full mr-4"></div>
               {category.title}
             </h3>
@@ -780,8 +834,127 @@ const SkillsSection = () => {
   );
 };
 
+const ExperienceSection = () => {
+  const [experienceRef, experienceVisible] = useScrollAnimation();
+
+  const experiences = [
+    {
+      title: "Associate Technical Consultant Intern",
+      company: "Volteo Digital & VolteoEdge",
+      location: "Remote",
+      period: "May 2022 – Apr 2023",
+      type: "Professional Experience",
+      icon: "💼",
+      achievements: [
+        "Designed an IoT-based architecture to process 100K+ telemetry data points using REST APIs, enabling real-time asset monitoring and predictive analytics",
+        "Automated ETL pipelines for IoT and ServiceNow data, boosting data processing speed by 30% and reducing manual errors",
+        "Designed scalable and configurable ServiceNow Customer Service Management (CSM) solutions using UI Builder, FSM, and Flow Designer",
+        "Streamlined IT Service Management (ITSM) operations by automating ticket triaging and resolution workflows, reducing SLA breaches by 40%",
+        "Integrated ServiceNow with third-party APIs for real-time data ingestion and unified service visibility across IoT platforms",
+        "Created custom ServiceNow dashboards and reports for visualizing support and device metrics, improving executive reporting and decision-making",
+        "Led implementation of reusable flow templates and scoped applications, improving team productivity in repetitive service workflows",
+        "Collaborated with cross-functional teams (developers, testers, architects) in Agile sprints to deliver high-priority feature enhancements",
+      ],
+      technologies: [
+        "Python",
+        "ServiceNow",
+        "REST APIs",
+        "IoT",
+        "Flow Designer",
+        "UI Builder",
+        "FSM",
+        "Agile",
+      ],
+    },
+  ];
+
+  return (
+    <section
+      ref={experienceRef}
+      id="experience"
+      className={`min-h-screen py-20 px-8 lg:px-16 transition-all duration-1000 ${
+        experienceVisible
+          ? "opacity-100 translate-y-0"
+          : "opacity-0 translate-y-10"
+      }`}
+    >
+      <h2 className="text-5xl font-bold text-white mb-16 text-center hover:scale-110 hover:text-blue-400 transition-all duration-300 cursor-default">
+        Experience
+      </h2>
+
+      <div className="space-y-12">
+        {experiences.map((exp, index) => (
+          <Card
+            key={index}
+            className={`bg-black/40 border-white/10 p-8 backdrop-blur-sm hover:bg-black/50 transition-all duration-700 ${
+              experienceVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            }`}
+            style={{ transitionDelay: `${index * 300}ms` }}
+          >
+            <div className="flex items-start space-x-6 mb-6">
+              <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-2xl flex-shrink-0">
+                {exp.icon}
+              </div>
+              <div className="flex-1">
+                <h4 className="text-2xl font-bold text-white mb-2">
+                  {exp.title}
+                </h4>
+                <p className="text-xl text-blue-300 mb-1">{exp.company}</p>
+                <div className="flex flex-wrap gap-4 text-white/60 text-sm mb-4">
+                  <span>{exp.location}</span>
+                  <span>•</span>
+                  <span>{exp.period}</span>
+                </div>
+
+                <div className="mb-6">
+                  <h5 className="text-lg font-semibold text-white mb-3">
+                    Key Achievements:
+                  </h5>
+                  <ul className="space-y-2">
+                    {exp.achievements.map((achievement, achIndex) => (
+                      <li
+                        key={achIndex}
+                        className="text-white/80 text-sm leading-relaxed flex items-start"
+                      >
+                        <span className="text-blue-300 mr-2 flex-shrink-0">
+                          •
+                        </span>
+                        {achievement}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="text-sm font-semibold text-white/60 mb-2">
+                    Technologies Learned / Worked on:
+                  </h5>
+                  <div className="flex flex-wrap gap-2">
+                    {exp.technologies.map((tech, techIndex) => (
+                      <span
+                        key={techIndex}
+                        className="px-3 py-1 bg-white/10 rounded-full text-xs text-white"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </section>
+  );
+};
+
 // Education section component
 const EducationSection = () => {
+  const [educationRef, educationVisible] = useScrollAnimation();
+
   const education = [
     {
       institution: "State University of New York, Binghamton",
@@ -795,13 +968,26 @@ const EducationSection = () => {
 
   return (
     <section
+      ref={educationRef}
       id="education"
-      className="min-h-screen py-20 px-8 lg:px-16 relative"
+      className={`min-h-screen py-20 px-8 lg:px-16 relative transition-all duration-1000 ${
+        educationVisible
+          ? "opacity-100 translate-y-0"
+          : "opacity-0 translate-y-10"
+      }`}
     >
-      <h2 className="text-5xl font-bold text-white mb-16">Education</h2>
+      <h2 className="text-5xl font-bold text-white mb-16 text-center hover:scale-110 hover:text-blue-400 transition-all duration-300 cursor-default">
+        Education
+      </h2>
 
       <div className="flex items-center justify-between">
-        <div className="flex-1 flex justify-center items-center relative">
+        <div
+          className={`flex-1 flex justify-center items-center relative transition-all duration-1000 ${
+            educationVisible
+              ? "opacity-100 -translate-x-0"
+              : "opacity-0 -translate-x-10"
+          }`}
+        >
           <div className="relative w-96 h-96 flex items-center justify-center">
             <img
               src="/images/education-icon.png"
@@ -811,7 +997,14 @@ const EducationSection = () => {
           </div>
         </div>
 
-        <div className="flex-1 space-y-6">
+        <div
+          className={`flex-1 space-y-6 transition-all duration-1000 ${
+            educationVisible
+              ? "opacity-100 translate-x-0"
+              : "opacity-0 translate-x-10"
+          }`}
+          style={{ transitionDelay: "300ms" }}
+        >
           {education.map((edu, index) => (
             <Card
               key={index}
@@ -851,54 +1044,71 @@ const EducationSection = () => {
 
 // Projects section component
 const ProjectsSection = () => {
+  const [projectsRef, projectsVisible] = useScrollAnimation();
+
   const projects = [
     {
-      title: "Cloud Cost Optimization Toolkit",
+      title: "Cloud Cost Optimization Toolkit (AWS)",
       description:
-        "Automated cost optimization tool using Boto3 and CloudWatch to identify idle AWS resources. Achieved 30-40% monthly cost reduction through automated lifecycle policies and cleanup routines.",
-      techStack: ["Python", "AWS Lambda", "CloudWatch", "S3", "SNS"],
-      icon: "💰",
+        "Developed an automated cost optimization tool using Boto3 and CloudWatch to identify and flag idle EC2, EBS, and RDS resources. Achieved an estimated 30–40% monthly cost reduction in test environments by automating lifecycle policies and cleanup routines.",
+      techStack: [
+        "Python",
+        "Boto3",
+        "AWS Lambda",
+        "CloudWatch",
+        "S3",
+        "SNS",
+        "IAM",
+        "Cost Explorer",
+      ],
+      icon: "☁️",
       github: "#",
       demo: "#",
     },
     {
-      title: "CI/CD Pipeline for Serverless Application",
+      title:
+        "CI/CD Pipeline for Serverless Application Using AWS CloudFormation",
       description:
-        "Complete CI/CD pipeline using AWS CloudFormation with reusable YAML templates. Reduced deployment time from hours to minutes with automated testing and rollback capabilities.",
-      techStack: ["CloudFormation", "CodePipeline", "Lambda", "API Gateway"],
+        "Created reusable YAML-based CloudFormation templates to provision a Lambda function with API Gateway, S3 bucket, IAM roles, and DynamoDB. Reduced deployment time from hours to minutes, ensuring consistent, repeatable infrastructure in dev and prod environments.",
+      techStack: [
+        "CloudFormation",
+        "CodePipeline",
+        "CodeCommit",
+        "CodeBuild",
+        "Lambda",
+        "API Gateway",
+        "DynamoDB",
+      ],
       icon: "🚀",
-      github: "#",
-      demo: "#",
-    },
-    {
-      title: "IoT Data Processing Architecture",
-      description:
-        "Designed IoT-based architecture processing 100K+ telemetry data points using REST APIs, enabling real-time asset monitoring and predictive analytics with 30% improved processing speed.",
-      techStack: ["Python", "REST APIs", "IoT", "ServiceNow"],
-      icon: "📡",
-      github: "#",
-      demo: "#",
-    },
-    {
-      title: "ServiceNow ITSM Automation",
-      description:
-        "Streamlined IT Service Management operations by automating ticket triaging and resolution workflows, reducing SLA breaches by 40% through custom dashboards and flow templates.",
-      techStack: ["ServiceNow", "Flow Designer", "REST APIs"],
-      icon: "🎫",
       github: "#",
       demo: "#",
     },
   ];
 
   return (
-    <section id="projects" className="min-h-screen py-20 px-8 lg:px-16">
-      <h2 className="text-5xl font-bold text-white mb-16">Projects</h2>
+    <section
+      ref={projectsRef}
+      id="projects"
+      className={`min-h-screen py-20 px-8 lg:px-16 transition-all duration-1000 ${
+        projectsVisible
+          ? "opacity-100 translate-y-0"
+          : "opacity-0 translate-y-10"
+      }`}
+    >
+      <h2 className="text-5xl font-bold text-white mb-16 text-center hover:scale-110 hover:text-blue-400 transition-all duration-300 cursor-default">
+        Projects
+      </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {projects.map((project, index) => (
           <Card
             key={index}
-            className="bg-black/40 border-white/10 p-6 backdrop-blur-sm hover:bg-black/50 transition-all duration-300 group"
+            className={`bg-black/40 border-white/10 p-6 backdrop-blur-sm hover:bg-black/50 transition-all duration-700 group ${
+              projectsVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            }`}
+            style={{ transitionDelay: `${index * 200}ms` }}
           >
             <div className="flex items-start space-x-4 mb-4">
               <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-xl">
@@ -953,10 +1163,17 @@ const ProjectsSection = () => {
 
 // Contact section component
 const ContactSection = () => {
+  const [contactRef, contactVisible] = useScrollAnimation();
+
   return (
     <section
+      ref={contactRef}
       id="contact"
-      className="min-h-screen py-20 px-8 lg:px-16 flex items-center"
+      className={`min-h-screen py-20 px-8 lg:px-16 flex items-center transition-all duration-1000 ${
+        contactVisible
+          ? "opacity-100 translate-y-0"
+          : "opacity-0 translate-y-10"
+      }`}
     >
       <div className="w-full max-w-4xl mx-auto text-center">
         <h2 className="text-5xl font-bold text-white mb-8">Ameer Shaik</h2>
@@ -1050,6 +1267,7 @@ export default function Portfolio() {
       <main>
         <HeroSection />
         <SkillsSection />
+        <ExperienceSection />
         <EducationSection />
         <ProjectsSection />
         <ContactSection />
