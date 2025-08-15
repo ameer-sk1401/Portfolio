@@ -8,6 +8,8 @@ My expertise spans **AWS, DevOps automation, and data engineering pipelines** �
 💡 This portfolio is a **self-hosted, live-updating profile** powered by GitHub Actions CI/CD and Netlify.  
 Whenever I push a new project or earn a new skill, it **automatically updates** — no manual edits needed.
 
+Portfolio Link : https://ameer-shaik-portfolio.netlify.app/
+
 ---
 
 ## 🎯 Career Focus
