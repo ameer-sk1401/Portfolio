@@ -161,13 +161,29 @@ const HeroSection = () => {
           Infrastructure and Automated Deployments.
         </p>
         <div className="flex items-center space-x-4">
-          <Button className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-6 py-3">
-            <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer">
+          <Button
+            asChild
+            className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-6 py-3"
+          >
+            <a
+              href={LINKS.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open LinkedIn profile"
+            >
               <Linkedin className="w-5 h-5" />
             </a>
           </Button>
-          <Button className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-6 py-3">
-            <a href={LINKS.github} target="_blank" rel="noopener noreferrer">
+          <Button
+            asChild
+            className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-6 py-3"
+          >
+            <a
+              href={LINKS.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open GitHub profile"
+            >
               <Github className="w-5 h-5" />
             </a>
           </Button>
@@ -951,36 +967,64 @@ const ContactSection = () => {
 
         <div className="flex justify-center space-x-6 mb-12">
           <Button
+            asChild
             variant="ghost"
             size="lg"
             className="text-white hover:text-blue-300"
           >
-            <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer">
+            <a
+              href={LINKS.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open LinkedIn profile"
+            >
               <Linkedin className="w-6 h-6" />
             </a>
           </Button>
           <Button
+            asChild
             variant="ghost"
             size="lg"
             className="text-white hover:text-blue-300"
           >
-            <a href={LINKS.github} target="_blank" rel="noopener noreferrer">
+            <a
+              href={LINKS.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open GitHub profile"
+            >
               <Github className="w-6 h-6" />
             </a>
           </Button>
           <Button
+            asChild
             variant="ghost"
             size="lg"
             className="text-white hover:text-blue-300"
           >
-            <a href={LINKS.email} target="_blank" rel="noopener noreferrer">
+            <a
+              href={LINKS.email}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Send email"
+            >
               <Mail className="w-6 h-6" />
             </a>
           </Button>
         </div>
 
-        <Button className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full text-lg">
-          Resume
+        <Button
+          asChild
+          className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full text-lg"
+        >
+          <a
+            href="/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open resume PDF"
+          >
+            Resume
+          </a>
         </Button>
 
         <div className="mt-16">
