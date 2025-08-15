@@ -102,9 +102,9 @@ const AnimatedParticles = () => {
 
 // Contact links (edit these)
 const LINKS = {
-  linkedin: "https://www.linkedin.com/in/your-linkedin-handle",
+  linkedin: "https://www.linkedin.com/in/ameer-shaik-087791218/",
   github: "https://github.com/ameer-sk1401",
-  email: "mailto:youremail@example.com",
+  email: "mailto:ameersk1401@gmail.com",
 };
 
 // Navigation component
