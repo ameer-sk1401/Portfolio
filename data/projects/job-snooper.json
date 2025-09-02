@@ -1,0 +1,19 @@
+{
+  "repo": "Job-Snooper",
+  "owner": "ameer-sk1401",
+  "html_url": "https://github.com/ameer-sk1401/Job-Snooper",
+  "description": "Scraoes jobs and notifies to the mail",
+  "language": "Python",
+  "stars": 0,
+  "forks": 0,
+  "updated_at": "2025-09-02T05:14:42Z",
+  "summary_title": "Job Snooper",
+  "summary_blurb": "📬 Automated job digester built on top of the [SimplifyJobs/New-Grad-Positions](https://github.com/SimplifyJobs/New-Grad-Positions) repo.",
+  "summary_bullets": [
+    "**Daily seed run (9 AM UTC or manual)**",
+    "Emails the **latest 50 jobs**.",
+    "Stores their IDs into `state/sent.json`."
+  ],
+  "topics": [],
+  "created_at": "2025-09-02T06:23:16.323Z"
+}
