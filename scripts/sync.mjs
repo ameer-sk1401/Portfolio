@@ -1,123 +1,149 @@
-// scripts/sync.mjs
-import fs from "fs";
-import path from "path";
-import fetch from "node-fetch";
+// scripts/sync.js
+// Usage:
+//   node scripts/sync.js
+// Required env:
+//   - GH_TOKEN: a PAT with repo:read/public_repo
+//   - PORTFOLIO_GH_USER: GitHub username to read repos from
+// Optional:
+//   - INCLUDE_TOPICS: "true" to include GitHub topics
+//   - MAX_REPOS: "50" to limit scanned repos
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const GH_USER = process.env.PORTFOLIO_GH_USER || "ameer-sk1401";
-const GH_TOKEN = process.env.GH_TOKEN; // stored in GitHub Secrets
-const PROJECTS_DIR = path.join(process.cwd(), "data", "projects");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Helper: ensure directory exists
-function ensureDir(dir) {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+const GH_TOKEN = process.env.GH_TOKEN;
+const USER = process.env.PORTFOLIO_GH_USER;
+if (!GH_TOKEN || !USER) {
+  console.error("Missing GH_TOKEN or PORTFOLIO_GH_USER");
+  process.exit(1);
+}
+
+const BASE = "https://api.github.com";
+const headers = {
+  "Authorization": `Bearer ${GH_TOKEN}`,
+  "Accept": "application/vnd.github+json",
+  "X-GitHub-Api-Version": "2022-11-28"
+};
+
+const projectsDir = path.join(__dirname, "..", "data", "projects");
+fs.mkdirSync(projectsDir, { recursive: true });
+
+function slugify(s) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+}
+
+function summarizeMarkdown(md) {
+  const lines = md.split(/\r?\n/);
+  const bullets = [];
+  let firstPara = "";
+  let foundPara = false;
+  let title = "";
+
+  for (const lineRaw of lines) {
+    const line = lineRaw.trim();
+    if (!title && line.startsWith("#")) {
+      title = line.replace(/^#+\s*/, "").trim();
+    }
+    if (!foundPara && line && !line.startsWith("#") && !line.startsWith(">")) {
+      firstPara = line;
+      foundPara = true;
+    }
+    if (line.startsWith("- ") || line.startsWith("* ")) {
+      bullets.push(line.replace(/^[-*]\s+/, ""));
+    }
   }
+
+  function words(s, n=60) {
+    return s.split(/\s+/).filter(Boolean).slice(0, n).join(" ");
+  }
+
+  return {
+    title,
+    blurb: firstPara ? words(firstPara, 60) : "",
+    bullets: bullets.slice(0, 3)
+  };
 }
 
-// Heuristic summarizer: extracts first meaningful paragraph
-function summarizeReadme(content) {
-  if (!content) return "";
-
-  // Remove markdown headers, code blocks, images, badges
-  let clean = content
-    .replace(/!\[.*?\]\(.*?\)/g, "") // images
-    .replace(/```[\s\S]*?```/g, "") // code fences
-    .replace(/#+\s.*/g, "") // headers
-    .replace(/\[.*?\]\(.*?\)/g, (m) => m.match(/\[(.*?)\]/)?.[1] || "") // links
-    .replace(/<[^>]+>/g, "") // html tags
-    .replace(/\r?\n|\r/g, "\n");
-
-  // Split into paragraphs
-  const paragraphs = clean
-    .split("\n\n")
-    .map((p) => p.trim())
-    .filter((p) => p.length > 40 && !p.toLowerCase().startsWith("installation"));
-
-  return paragraphs.length > 0
-    ? paragraphs[0].slice(0, 800) // limit length
-    : clean.slice(0, 500);
-}
-
-// Fetch list of repos
-async function fetchRepos() {
-  const res = await fetch(`https://api.github.com/users/${GH_USER}/repos?per_page=100`, {
-    headers: { Authorization: `token ${GH_TOKEN}` },
-  });
+async function gh(url) {
+  const res = await fetch(url, { headers });
   if (!res.ok) {
-    throw new Error(`Failed to fetch repos: ${res.status}`);
+    const text = await res.text();
+    throw new Error(`GitHub API ${res.status} for ${url}: ${text}`);
   }
   return res.json();
 }
 
-// Fetch .portfolio.json file
-async function fetchTokenFile(repo) {
-  const url = `https://raw.githubusercontent.com/${GH_USER}/${repo.name}/main/.portfolio.json`;
-  const res = await fetch(url, {
-    headers: { Authorization: `token ${GH_TOKEN}` },
-  });
-  if (res.ok) {
-    return await res.json();
-  }
-  return null;
+function decodeBase64(b64) {
+  return Buffer.from(b64 || "", "base64").toString("utf-8");
 }
 
-// Fetch README.md
-async function fetchReadme(repo) {
-  const url = `https://raw.githubusercontent.com/${GH_USER}/${repo.name}/main/README.md`;
-  const res = await fetch(url, {
-    headers: { Authorization: `token ${GH_TOKEN}` },
-  });
-  if (res.ok) {
-    return await res.text();
+async function main() {
+  const per_page = 100;
+  let page = 1;
+  let all = [];
+  const maxRepos = process.env.MAX_REPOS ? parseInt(process.env.MAX_REPOS, 10) : Infinity;
+
+  while (true) {
+    const url = `${BASE}/users/${USER}/repos?per_page=${per_page}&page=${page}&sort=updated`;
+    const chunk = await gh(url);
+    all = all.concat(chunk);
+    if (chunk.length < per_page || all.length >= maxRepos) break;
+    page++;
   }
-  return "";
-}
+  if (Number.isFinite(maxRepos)) {
+    all = all.slice(0, maxRepos);
+  }
 
-// Sync projects
-async function syncProjects() {
-  ensureDir(PROJECTS_DIR);
+  for (const repo of all) {
+    if (repo.fork || repo.archived) continue;
 
-  const repos = await fetchRepos();
-  for (const repo of repos) {
-    try {
-      const tokenData = await fetchTokenFile(repo);
-      const filePath = path.join(PROJECTS_DIR, `${repo.name}.json`);
-
-      if (tokenData) {
-        const readme = await fetchReadme(repo);
-        const summary = summarizeReadme(readme);
-
-        const projectData = {
-          repo: repo.name,
-          title: tokenData.title || repo.name,
-          description: tokenData.description || summary,
-          techStack: tokenData.techStack || [],
-          demo: tokenData.demo || null,
-          github: tokenData.github || repo.html_url,
-          lastUpdated: repo.pushed_at,
-        };
-
-        const newContent = JSON.stringify(projectData, null, 2);
-        const oldContent = fs.existsSync(filePath)
-          ? fs.readFileSync(filePath, "utf-8")
-          : null;
-
-        if (newContent !== oldContent) {
-          fs.writeFileSync(filePath, newContent);
-          console.log(`✅ Updated: ${repo.name}`);
-        } else {
-          console.log(`⏩ Skipped (no change): ${repo.name}`);
-        }
-      } else {
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-          console.log(`🗑 Removed: ${repo.name} (no token file)`);
-        }
-      }
-    } catch (err) {
-      console.error(`❌ Error processing ${repo.name}:`, err.message);
+    const fname = path.join(projectsDir, `${slugify(repo.name)}.json`);
+    if (fs.existsSync(fname)) {
+      // append-only: keep existing entry
+      continue;
     }
+    let readmeText = "";
+    try {
+      const readme = await gh(`${BASE}/repos/${repo.owner.login}/${repo.name}/readme`);
+      readmeText = decodeBase64(readme.content);
+    } catch {
+      // repo without README
+    }
+    const summary = summarizeMarkdown(readmeText || "");
+
+    let topics = [];
+    if (process.env.INCLUDE_TOPICS === "true") {
+      try {
+        const t = await gh(`${BASE}/repos/${repo.owner.login}/${repo.name}/topics`);
+        topics = Array.isArray(t.names) ? t.names : [];
+      } catch {}
+    }
+
+    const payload = {
+      repo: repo.name,
+      owner: repo.owner.login,
+      html_url: repo.html_url,
+      description: repo.description || "",
+      language: repo.language || "",
+      stars: repo.stargazers_count || 0,
+      forks: repo.forks_count || 0,
+      updated_at: repo.updated_at,
+      summary_title: summary.title || repo.name,
+      summary_blurb: summary.blurb,
+      summary_bullets: summary.bullets,
+      topics,
+      created_at: new Date().toISOString()
+    };
+
+    fs.writeFileSync(fname, JSON.stringify(payload, null, 2));
+    console.log("Added project:", fname);
   }
 }
 
-await syncProjects();
+main().catch(err => {
+  console.error(err);
+  process.exit(1);
+});
