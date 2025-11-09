@@ -1,0 +1,19 @@
+{
+  "repo": "Azure_3-Tier_Application_Architecture",
+  "owner": "ameer-sk1401",
+  "html_url": "https://github.com/ameer-sk1401/Azure_3-Tier_Application_Architecture",
+  "description": "Azure Three-Tier Web Application Architecture",
+  "language": "",
+  "stars": 0,
+  "forks": 0,
+  "updated_at": "2025-11-08T07:11:10Z",
+  "summary_title": "Azure Three-Tier Web Application Architecture",
+  "summary_blurb": "This project showcases a **production-grade three-tier web application** deployed on Microsoft Azure. The architecture demonstrates enterprise-level practices including high availability, auto-scaling, network security, and zero-trust principles.",
+  "summary_bullets": [
+    "✅ **Network Micro-Segmentation**: Each tier isolated with dedicated NSGs",
+    "✅ **Private Database Access**: Azure SQL accessible only via Private Endpoint",
+    "✅ **Zero Trust Access**: No public IPs on application VMs"
+  ],
+  "topics": [],
+  "created_at": "2025-11-09T06:21:18.101Z"
+}
