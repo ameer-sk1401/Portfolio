@@ -1,0 +1,19 @@
+{
+  "repo": "CostGuardian_terraform",
+  "owner": "ameer-sk1401",
+  "html_url": "https://github.com/ameer-sk1401/CostGuardian_terraform",
+  "description": "Terraform infra files to create Costguardian tool",
+  "language": "Python",
+  "stars": 0,
+  "forks": 0,
+  "updated_at": "2025-12-12T23:56:45Z",
+  "summary_title": "CostGuardian 🛡️",
+  "summary_blurb": "**Automated AWS Cost Optimization & Resource Management**",
+  "summary_bullets": [
+    "**EC2 Instances** - Detects idle instances (CPU < 5%), stops them, and deletes after grace period",
+    "**RDS Databases** - Monitors connections and IOPS, stops idle databases",
+    "**NAT Gateways** - Identifies unused NAT Gateways with minimal traffic"
+  ],
+  "topics": [],
+  "created_at": "2025-12-13T06:23:37.999Z"
+}
