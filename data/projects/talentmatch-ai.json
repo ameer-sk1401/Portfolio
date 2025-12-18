@@ -1,0 +1,19 @@
+{
+  "repo": "TalentMatch-AI",
+  "owner": "ameer-sk1401",
+  "html_url": "https://github.com/ameer-sk1401/TalentMatch-AI",
+  "description": "A resume version control system",
+  "language": "Python",
+  "stars": 0,
+  "forks": 0,
+  "updated_at": "2025-12-17T21:24:44Z",
+  "summary_title": "🤖 TalentMatch-AI : AI-Powered Resume Matcher",
+  "summary_blurb": "A serverless, AI-driven resume matching system built on AWS that intelligently matches resumes with job descriptions using Amazon Bedrock and delivers results via Telegram bot.",
+  "summary_bullets": [
+    "[Overview](#overview)",
+    "[Architecture](#architecture)",
+    "[Technologies Used](#technologies-used)"
+  ],
+  "topics": [],
+  "created_at": "2025-12-18T06:26:33.524Z"
+}
